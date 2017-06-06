@@ -20,7 +20,11 @@ public class Insumo {
         return this.renglon;
     }
     
-    public String getDescription() {
+    public String getClave() {
+       return this.clave;
+    }
+    
+    public String getDescripcion() {
         return this.descripcion;
     }
     
