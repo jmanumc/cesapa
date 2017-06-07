@@ -12,6 +12,15 @@ public class Insumo {
     private String unidadMedida;
     private String parametro;
     
+    public Insumo(Integer id, int renglon, String clave, String descripcion, String unidadMedida, String parametro) {
+        this.id= id;
+        this.renglon = renglon;
+        this.clave = clave;
+        this.descripcion = descripcion;
+        this.unidadMedida = unidadMedida;
+        this.parametro = parametro;
+    }
+    
     public Integer getId() {
         return this.id;
     }
