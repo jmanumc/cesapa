@@ -91,7 +91,7 @@ public class InsumoServicio {
         List<Insumo> insumos = new ArrayList<>();
         
         try {
-            PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM " + this.tabla + " WHERE descripcion LIKE '%"+ busqueda +"%'");
+            PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM " + this.tabla + " WHERE renglon LIKE '"+ busqueda +"%' OR descripcion LIKE '%"+ busqueda +"%'");
             ResultSet resultado = consulta.executeQuery();
             
             while (resultado.next()) {
