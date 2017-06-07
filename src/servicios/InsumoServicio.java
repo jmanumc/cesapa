@@ -2,7 +2,10 @@ package servicios;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import modelos.Insumo;
 
 /**
@@ -37,5 +40,50 @@ public class InsumoServicio {
         } catch(SQLException e) {
             throw new SQLException(e);
         }
+    }
+    
+    public Insumo obtenerPorId(Connection conexion, int id) throws SQLException {
+        Insumo insumo = null;
+        
+        try {
+            PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM " + this.tabla + " WHERE id = ?");
+            consulta.setInt(1, id);
+            ResultSet resultado = consulta.executeQuery();
+            
+            while (resultado.next()) {
+                insumo = new Insumo(id, resultado.getInt("renglon"), resultado.getString("clave"), resultado.getString("descripcion"), resultado.getString("unidadMedida"), resultado.getString("parametro"));
+            }
+        } catch(SQLException e) {
+            throw new SQLException(e);
+        }
+        
+        return insumo;
+    }
+    
+    public void eliminar(Connection conexion, Insumo insumo) throws SQLException {
+        try {
+            PreparedStatement consulta = conexion.prepareStatement("DELETE FROM " + this.tabla + " WHERE id = ?");
+            consulta.setInt(1, insumo.getId());
+            consulta.executeUpdate();
+        } catch(SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+    
+    public List<Insumo> obtenerTodas(Connection conexion) throws SQLException {
+        List<Insumo> insumos = new ArrayList<>();
+        
+        try {
+            PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM " + this.tabla + " ORDER BY id");
+            ResultSet resultado = consulta.executeQuery();
+            
+            while (resultado.next()) {
+                insumos.add(new Insumo(resultado.getInt("id"), resultado.getInt("renglon"), resultado.getString("clave"), resultado.getString("descripcion"), resultado.getString("unidadMedida"), resultado.getString("parametro")));
+            }
+        } catch(SQLException e) {
+            throw new SQLException(e);
+        }
+        
+        return insumos;
     }
 }
