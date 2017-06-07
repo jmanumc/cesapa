@@ -86,4 +86,21 @@ public class InsumoServicio {
         
         return insumos;
     }
+    
+    public List<Insumo> buscar(Connection conexion, String busqueda) throws SQLException {
+        List<Insumo> insumos = new ArrayList<>();
+        
+        try {
+            PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM " + this.tabla + " WHERE descripcion LIKE '%"+ busqueda +"%'");
+            ResultSet resultado = consulta.executeQuery();
+            
+            while (resultado.next()) {
+                insumos.add(new Insumo(resultado.getInt("id"), resultado.getInt("renglon"), resultado.getString("clave"), resultado.getString("descripcion"), resultado.getString("unidad_medida"), resultado.getString("parametro")));
+            }
+        } catch(SQLException e) {
+            throw new SQLException(e);
+        }
+        
+        return insumos;
+    }
 }
