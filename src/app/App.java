@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package app;
 
 import controladores.InsumosControlador;
@@ -14,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Sammy Guergachi <sguergachi at gmail.com>
+ * @author Juan Manuel Mc <j-manuel_mtz23 at hotmail.com>
  */
 public class App extends javax.swing.JFrame {
     private InsumosControlador insumosControlador;
@@ -88,7 +83,7 @@ public class App extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("Buscador (Escriba el nombre del medicamento):");
+        jLabel1.setText("Buscador (Escriba el reglon o nombre del medicamento):");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
