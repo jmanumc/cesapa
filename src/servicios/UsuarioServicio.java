@@ -58,24 +58,6 @@ public class UsuarioServicio {
         return usuario;
     }
     
-    public Usuario obtenerPorCorreoElectronico(Connection conexion, String correoElectronico) throws SQLException {
-        Usuario usuario = null;
-        
-        try {
-            PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM " + this.tabla + " WHERE correo_electronico = ?");
-            consulta.setString(1, correoElectronico);
-            ResultSet resultado = consulta.executeQuery();
-            
-            while (resultado.next()) {
-                usuario = new Usuario(resultado.getInt("id"), resultado.getString("correo_electronico"), resultado.getString("contrasenia"), resultado.getString("nombre"), resultado.getString("tipo"));
-            }
-        } catch(SQLException e) {
-            throw new SQLException(e);
-        }
-        
-        return usuario;
-    }
-    
     public void eliminar(Connection conexion, Usuario usuario) throws SQLException {
         try {
             PreparedStatement consulta = conexion.prepareStatement("DELETE FROM " + this.tabla + " WHERE id = ?");
