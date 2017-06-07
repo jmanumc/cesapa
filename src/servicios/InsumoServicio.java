@@ -51,7 +51,7 @@ public class InsumoServicio {
             ResultSet resultado = consulta.executeQuery();
             
             while (resultado.next()) {
-                insumo = new Insumo(id, resultado.getInt("renglon"), resultado.getString("clave"), resultado.getString("descripcion"), resultado.getString("unidadMedida"), resultado.getString("parametro"));
+                insumo = new Insumo(id, resultado.getInt("renglon"), resultado.getString("clave"), resultado.getString("descripcion"), resultado.getString("unidad_medida"), resultado.getString("parametro"));
             }
         } catch(SQLException e) {
             throw new SQLException(e);
@@ -78,7 +78,7 @@ public class InsumoServicio {
             ResultSet resultado = consulta.executeQuery();
             
             while (resultado.next()) {
-                insumos.add(new Insumo(resultado.getInt("id"), resultado.getInt("renglon"), resultado.getString("clave"), resultado.getString("descripcion"), resultado.getString("unidadMedida"), resultado.getString("parametro")));
+                insumos.add(new Insumo(resultado.getInt("id"), resultado.getInt("renglon"), resultado.getString("clave"), resultado.getString("descripcion"), resultado.getString("unidad_medida"), resultado.getString("parametro")));
             }
         } catch(SQLException e) {
             throw new SQLException(e);
