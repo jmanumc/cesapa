@@ -30,4 +30,8 @@ public class InsumosControlador {
     public List<Insumo> index() throws SQLException {
        return insumoServicio.obtenerTodas(Conexion.conexion);
     }
+    
+    public List<Insumo> index(String busqueda) throws SQLException {
+        return insumoServicio.buscar(Conexion.conexion, busqueda);
+    }
 }
