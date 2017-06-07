@@ -17,26 +17,42 @@ import javax.swing.table.DefaultTableModel;
  * @author Sammy Guergachi <sguergachi at gmail.com>
  */
 public class App extends javax.swing.JFrame {
-
+    private InsumosControlador insumosControlador;
+    private List<Insumo> insumos;
+    private DefaultTableModel model;
+    
     /**
      * Creates new form App
      */
     public App() {
         initComponents();
         
-        DefaultTableModel model = (DefaultTableModel) tbInsumos.getModel();
-        InsumosControlador insumosControlador = new InsumosControlador();
-        List<Insumo> insumos;
+        insumosControlador = new InsumosControlador();
+        model = (DefaultTableModel) tbInsumos.getModel();
         
         try {
             insumosControlador.abrirConexion();
             insumos = insumosControlador.index();
             
-            insumos.forEach((Insumo insumo) -> {
-               model.addRow(new Object[]{insumo.getRenglon(), insumo.getClave(), insumo.getDescripcion()}); 
-            });
+            actualizarFilas();
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void actualizarFilas() {
+        limpiarFilas();
+        
+        insumos.forEach((Insumo insumo) -> {
+            model.addRow(new Object[]{insumo.getRenglon(), insumo.getClave(), insumo.getDescripcion()});
+        });
+    }
+    
+    private void limpiarFilas() {
+        int rowCount = model.getRowCount();
+        
+        for (int i = rowCount - 1; i >= 0; i--) {
+            model.removeRow(i);
         }
     }
 
@@ -51,8 +67,8 @@ public class App extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        tfBuscador = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         spInsumos = new javax.swing.JScrollPane();
         tbInsumos = new javax.swing.JTable();
 
@@ -64,13 +80,15 @@ public class App extends javax.swing.JFrame {
         jLabel2.setText("Medicamentos");
         jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tfBuscador.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tfBuscador.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfBuscadorKeyReleased(evt);
+            }
+        });
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/rojos/buscar.png"))); // NOI18N
-        jButton1.setBorder(null);
-        jButton1.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jButton1.setOpaque(false);
-        jButton1.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/img/verdes/buscar.png"))); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setText("Buscador (Escriba el nombre del medicamento):");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -80,10 +98,10 @@ public class App extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+                    .addComponent(tfBuscador, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -91,10 +109,10 @@ public class App extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tfBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -128,7 +146,7 @@ public class App extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(spInsumos))
+                    .addComponent(spInsumos, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -136,14 +154,25 @@ public class App extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(spInsumos, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tfBuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfBuscadorKeyReleased
+        try {
+            String busqueda = tfBuscador.getText();
+            insumos = insumosControlador.index(busqueda);
+            
+            actualizarFilas();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_tfBuscadorKeyReleased
 
     /**
      * @param args the command line arguments
@@ -181,11 +210,11 @@ public class App extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JScrollPane spInsumos;
     private javax.swing.JTable tbInsumos;
+    private javax.swing.JTextField tfBuscador;
     // End of variables declaration//GEN-END:variables
 }
